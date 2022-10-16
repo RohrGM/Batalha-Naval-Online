@@ -1,19 +1,24 @@
+package server;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
+import view.Menu;
+import service.Service;
 
 public class Server extends UnicastRemoteObject implements Service{
 
 	private static final long serialVersionUID = 1L;
 	
-	private int call = 0;
+	List<Menu> clients = new ArrayList<>();
 	
-	List<Client> clients = new ArrayList<>();
+	public Server() throws RemoteException {
+		super();
+	}
 	
-	public static void main(String[] args) {
+	public void start() {
 		try {
 			Server server = new Server();
 			String local = "//localhost/service";
@@ -29,14 +34,11 @@ public class Server extends UnicastRemoteObject implements Service{
 		}
 	}
 
-	protected Server() throws RemoteException {
-		super();
-	}
-
-	@Override
-	public String hello(Client client) throws RemoteException {
-		clients.add(client);
-		call += 1;
-		return "Hello World " + call;
+	public String hello(Menu client) throws RemoteException {
+		if(!clients.contains(client)) {
+			clients.add(client);
+		}
+		
+		return "Hello World";
 	}
 }
