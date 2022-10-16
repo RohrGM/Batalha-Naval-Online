@@ -5,14 +5,15 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
-import view.Menu;
+
+import scene.Principal;
 import service.Service;
 
 public class Server extends UnicastRemoteObject implements Service{
 
 	private static final long serialVersionUID = 1L;
 	
-	List<Menu> clients = new ArrayList<>();
+	List<Principal> clients = new ArrayList<>();
 	
 	public Server() throws RemoteException {
 		super();
@@ -34,11 +35,15 @@ public class Server extends UnicastRemoteObject implements Service{
 		}
 	}
 
-	public String hello(Menu client) throws RemoteException {
+	public String hello(Principal client) throws RemoteException {
 		if(!clients.contains(client)) {
 			clients.add(client);
 		}
 		
 		return "Hello World";
+	}
+	
+	public void test() {
+		System.out.println("teste");
 	}
 }
