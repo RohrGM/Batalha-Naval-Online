@@ -7,31 +7,23 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.MalformedURLException;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import server.Server;
-import service.IService;
 import util.Service;
 import util.SizePattern;
 
 public class SFindMatch extends JPanel {
 
+	private static final long serialVersionUID = -5776263174068026435L;
 	private JTextField txtIp = new JTextField();
 	private JTextField txtPort = new JTextField();
 	private JButton btnFindMatch = new JButton("Buscar");
 	private JButton btnBack = new JButton("Voltar");
 	private SPrincipal main;
-	private Server server;
-	private IService service;
 
-	public SFindMatch(Server server, SPrincipal main) {
-		this.server = server;
+	public SFindMatch(SPrincipal main) {
 		this.main = main;
 		initComponents();
 	}
@@ -39,12 +31,8 @@ public class SFindMatch extends JPanel {
 	private ActionListener findMatchBtnAction() {
 		return new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					service = Service.getRemoteService(txtIp.getText(), txtPort.getText());
-					service.joinRoom(main.getPlayer());
-				} catch (MalformedURLException | RemoteException | NotBoundException e1) {
-					JOptionPane.showMessageDialog(null, "Erro ao buscar servidor");
-				}
+				main.setService(Service.getRemoteService(txtIp.getText(), txtPort.getText()));
+				main.changeScene("Lobby");
 			}
 		};
 	}
@@ -62,7 +50,7 @@ public class SFindMatch extends JPanel {
 		int wPanel = SizePattern.getWidht();
 		int hPanel = SizePattern.getHeight();
 
-		setBounds(-8, -32, wPanel, hPanel);
+		setBounds(SizePattern.getxOffSet(), SizePattern.getyOffSet(), wPanel, hPanel);
 		setLayout(null);
 
 		int wIpTxt = 300;

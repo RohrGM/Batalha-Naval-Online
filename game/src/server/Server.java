@@ -8,10 +8,11 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import Interface.IService;
 import component.Player;
 import component.Room;
 import scene.SPrincipal;
-import service.IService;
+import service.ListenerService;
 
 public class Server extends UnicastRemoteObject implements IService {
 
@@ -19,7 +20,7 @@ public class Server extends UnicastRemoteObject implements IService {
 
 	private Room room = new Room();
 	
-	List<SPrincipal> clients = new ArrayList<>();
+	List<ListenerService> clients = new ArrayList<>();
 
 	public Server() throws RemoteException {
 		super();
@@ -48,10 +49,13 @@ public class Server extends UnicastRemoteObject implements IService {
 	}
 
 	@Override
-	public Room joinRoom(Player player) throws RemoteException {
-		System.out.println(room);
+	public void joinRoom(Player player, ListenerService listener) throws RemoteException {
+		clients.add(listener);
 		room.addPlayer(player);
-		return room;
+		
+		for (ListenerService listenerService : clients) {
+			listenerService.updateRoom(room);
+		}
 	}
 
 }

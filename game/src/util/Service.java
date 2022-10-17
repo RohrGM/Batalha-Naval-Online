@@ -5,15 +5,25 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
-import service.IService;
+import Interface.IService;
 
 public final class Service {
 
-	public static service.IService getLocalService() throws MalformedURLException, RemoteException, NotBoundException {
-		return (IService) Naming.lookup("rmi://localhost:1099/service");
+	public static Interface.IService getLocalService() {		
+		try {
+			return (IService) Naming.lookup("rmi://localhost:1099/service");
+		} catch (MalformedURLException | RemoteException | NotBoundException e) {
+			e.printStackTrace();
+		}		
+		return null;
 	}
 	
-	public static service.IService getRemoteService(String ip, String port) throws MalformedURLException, RemoteException, NotBoundException {
-		return (IService) Naming.lookup(String.format("rmi://%s:%s/service", ip, port));
+	public static Interface.IService getRemoteService(String ip, String port){
+		try {
+			return (IService) Naming.lookup(String.format("rmi://%s:%s/service", ip, port));
+		} catch (MalformedURLException | RemoteException | NotBoundException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
