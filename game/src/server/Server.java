@@ -1,31 +1,38 @@
 package server;
+
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import scene.Principal;
-import service.Service;
+import component.Player;
+import component.Room;
+import scene.SPrincipal;
+import service.IService;
 
-public class Server extends UnicastRemoteObject implements Service{
+public class Server extends UnicastRemoteObject implements IService {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 3974011185418484023L;
+
+	private Room room = new Room();
 	
-	List<Principal> clients = new ArrayList<>();
-	
+	List<SPrincipal> clients = new ArrayList<>();
+
 	public Server() throws RemoteException {
 		super();
 	}
-	
+
 	public void start() {
 		try {
 			Server server = new Server();
-			String local = "//localhost/service";
-			try {				
+			try {
 				System.out.println("Server starting...");
-				Naming.rebind(local, server);
+				System.setProperty("java.rmi.server.hostname", "localhost");
+				LocateRegistry.createRegistry(1099);
+				Naming.rebind("service", server);
 				System.out.println("Server started");
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
@@ -35,15 +42,16 @@ public class Server extends UnicastRemoteObject implements Service{
 		}
 	}
 
-	public String hello(Principal client) throws RemoteException {
-		if(!clients.contains(client)) {
-			clients.add(client);
-		}
-		
-		return "Hello World";
+	@Override
+	public String hello(String a) throws RemoteException {
+		return "Hello World " + a;
 	}
-	
-	public void test() {
-		System.out.println("teste");
+
+	@Override
+	public Room joinRoom(Player player) throws RemoteException {
+		System.out.println(room);
+		room.addPlayer(player);
+		return room;
 	}
+
 }

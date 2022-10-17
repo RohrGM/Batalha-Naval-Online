@@ -1,14 +1,14 @@
 import java.awt.EventQueue;
 
-import scene.Principal;
+import scene.SPrincipal;
 
-public class Main {
+public class main {
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Principal frame = new Principal();
+					SPrincipal frame = new SPrincipal();
 					frame.setVisible(true);
 					
 				} catch (Exception e) {
@@ -17,5 +17,4 @@ public class Main {
 			}
 		});	
 	}
-
 }
