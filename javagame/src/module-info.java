@@ -1,0 +1,9 @@
+/**
+ * 
+ */
+/**
+ * @author Guilherme
+ *
+ */
+module javagame {
+}

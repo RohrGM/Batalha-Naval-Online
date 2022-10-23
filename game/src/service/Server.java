@@ -1,26 +1,20 @@
-package server;
+package service;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.List;
 
-import Interface.IService;
+import Interface.ICommunication;
 import component.Player;
 import component.Room;
-import scene.SPrincipal;
-import service.ListenerService;
 
-public class Server extends UnicastRemoteObject implements IService {
+public class Server extends UnicastRemoteObject implements ICommunication {
 
 	private static final long serialVersionUID = 3974011185418484023L;
-
-	private Room room = new Room();
-	
-	List<ListenerService> clients = new ArrayList<>();
+	private Room roomLoby = new Room();
 
 	public Server() throws RemoteException {
 		super();
@@ -49,13 +43,7 @@ public class Server extends UnicastRemoteObject implements IService {
 	}
 
 	@Override
-	public void joinRoom(Player player, ListenerService listener) throws RemoteException {
-		clients.add(listener);
-		room.addPlayer(player);
-		
-		for (ListenerService listenerService : clients) {
-			listenerService.updateRoom(room);
-		}
+	public List<Player> subscribe(Player player) throws RemoteException {
+		return roomLoby.subscribe(player);
 	}
-
 }

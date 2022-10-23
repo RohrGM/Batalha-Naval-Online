@@ -2,28 +2,16 @@ package util;
 
 public final class SizePattern {
 
-	private static int widht = 608;
-	private static int height = 800;
-	private static int xOffSet = -8;
-	private static int yOffSet = -32;
+	final private static int originalTileSize = 16;	
+	final private static int scale = 4;
+	final public static int tileSize = scale * originalTileSize;
+	final private static int maxScreenCol = 20;
+	final private static int maxScreenRow = 12;
+	final public static int screenWidth = tileSize * maxScreenCol;
+	final public static int screenHeight = tileSize * maxScreenRow;
 	
-	public static int getXCenterPosition(int xParent, int xItem) {
-		return (xParent / 2) - (xItem /2);		
-	}
 	
-	public static int getWidht() {
-		return widht;
+	public static int getXCenterPosition(int xReference, int xItem) {
+		return (xReference / 2) - (xItem /2);		
 	}
-	
-	public static int getHeight() {
-		return height;
-	}
-
-	public static int getxOffSet() {
-		return xOffSet;
-	}
-
-	public static int getyOffSet() {
-		return yOffSet;
-	}		
 }
