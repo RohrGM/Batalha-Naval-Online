@@ -13,20 +13,20 @@ import javax.swing.JPanel;
 import Interface.IEntity;
 import asset.ImageData;
 import component.EntityManager;
-import entity.Attacker;
 import entity.PlayerDefend;
+import entity.Sentinel;
 import util.SizePattern;
 
-public class GameDefend extends JPanel implements Runnable {
+public class GamePanel extends JPanel implements Runnable {
 
-	private Thread gameThread;
-	private ImageData imageData = new ImageData();
-	private EntityManager manager;
-	private PanelController panelController;
-	private static long frameCount = 1;
-	private final int FPS = 30;
+	protected Thread gameThread;
+	protected ImageData imageData = new ImageData();
+	protected EntityManager manager;
+	protected PanelController panelController;
+	protected static long frameCount = 1;
+	protected final int FPS = 30;
 
-	public GameDefend(PanelController panelController) {
+	public GamePanel(PanelController panelController) {
 		this.panelController = panelController;
 		this.manager = new EntityManager(this.panelController.getCommunication(),
 				Long.toString(this.panelController.getPlayer().getId()));
@@ -34,10 +34,6 @@ public class GameDefend extends JPanel implements Runnable {
 		this.setDoubleBuffered(true);
 		this.startGameThread();
 		this.setFocusable(true);
-
-		PlayerDefend player = new PlayerDefend(this.manager);
-		this.manager.addEntity(player);
-		this.panelController.addKeyListener(player.getKeyHandler());
 	}
 
 	private void startGameThread() {
@@ -51,16 +47,9 @@ public class GameDefend extends JPanel implements Runnable {
 		}
 	}
 
-	private void checkLife(IEntity entity) {
-		if (entity.isAlive() == false) {
-			this.manager.removeEntity(entity);
-		}
-	}
-
 	private void update() {
 		for (IEntity entity : new ArrayList<>(this.manager.getEntities())) {
 			entity.update();
-			this.checkLife(entity);
 		}
 	}
 

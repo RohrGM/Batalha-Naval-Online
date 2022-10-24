@@ -1,23 +1,12 @@
 package asset;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.io.Serializable;
 
-import javax.imageio.ImageIO;
+public class ImageData implements Serializable {
 
-public class ImageData {
-
-	public BufferedImage background;	
-	public BufferedImage playerCell;
-	public BufferedImage ober1;
-	
-	public ImageData() {
-		try {
-			background = ImageIO.read(getClass().getResourceAsStream("/asset/image/background.png"));
-			playerCell = ImageIO.read(getClass().getResourceAsStream("/asset/image/playerCell.png"));
-			ober1 = ImageIO.read(getClass().getResourceAsStream("/asset/image/ober1.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+	private static final long serialVersionUID = 8505509878138973324L;
+	public String background = "/asset/image/background.png";
+	public String playerCell = "/asset/image/playerCell.png";
+	public String ober1 = "/asset/image/ober1.png";
+	public String zombie1 = "/asset/image/zombie1.png";
 }

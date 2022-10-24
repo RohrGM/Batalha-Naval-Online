@@ -43,6 +43,9 @@ public class PanelController extends JPanel {
 		case "GameDefend":
 			this.add(new GameDefend(this));
 			break;
+		case "GameAttack":
+			this.add(new GameAttack(this));
+			break;
 		}
 
 		this.revalidate();

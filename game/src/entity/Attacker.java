@@ -3,48 +3,67 @@ package entity;
 import java.awt.Graphics2D;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import Interface.IEntity;
 import asset.ImageData;
 import component.EntityManager;
-import panel.GameDefend;
+import util.Collision;
 import util.Rect2;
 import util.SizePattern;
 import util.Vector2;
 
-public class Sentinel implements IEntity, Serializable, Cloneable {
+public class Attacker implements IEntity, Serializable, Cloneable {
 
 	private Rect2 rect = new Rect2(SizePattern.tileSize * 2, SizePattern.tileSize * 2);
 	private static final long serialVersionUID = 1347943847248129981L;
-	private static final Rect2 rectOffSet = new Rect2(-16, -64);
-	private long frameStart = GameDefend.getFrameCount();
 	private ImageData imageData = new ImageData();
+	private boolean isAlive = true;
 	private EntityManager manager;
 	private Vector2 position;
+	private int damage;
+	private int life;
 
-	public Sentinel(Vector2 position, EntityManager manager) {
+	private final int XOFFSET = -16;
+	private final int YOFFSET = -64;
+	private final int SPEED = 1;
+
+	public Attacker(EntityManager manager, Vector2 position) {
+		this.position = new Vector2(position.x + XOFFSET, position.y + YOFFSET);
 		this.manager = manager;
-		this.position = new Vector2(position.x + rectOffSet.w, position.y + rectOffSet.h);
+		this.damage = 10;
+		this.life = 50;
 	}
 
-	private void shoot() {
-		this.manager.addEntity(new Bullet(this.manager, position.sum(new Vector2(96, 56))));
+	private void onBodyCollision() {
+		List<IEntity> entities = this.manager.getEntities();
+		boolean isColliding = false;
+		for (IEntity entity : new ArrayList<>(entities)) {
+			if (entity.getClass() == Sentinel.class && Collision.is_colliding(this, entity)) {
+				isColliding = true;
+			}
+		}
+
+		if (isColliding == false) {
+			this.position.x -= this.SPEED;
+		}
 	}
 
 	@Override
 	public void update() {
-		if ((GameDefend.getFrameCount() + this.frameStart) % 90 == 0) {
-			System.out.println("atirei: " + GameDefend.getFrameCount());
-			this.shoot();
+		onBodyCollision();
+		if (this.position.x <= -100) {
+			this.isAlive = false;
 		}
 	}
 
 	@Override
 	public void draw(Graphics2D graphics2d) {
 		try {
-			graphics2d.drawImage(ImageIO.read(getClass().getResourceAsStream(this.imageData.ober1)), this.position.x,
+			graphics2d.drawImage(ImageIO.read(getClass().getResourceAsStream(this.imageData.zombie1)), this.position.x,
 					this.position.y, SizePattern.tileSize * 2, SizePattern.tileSize * 2, null);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -56,13 +75,9 @@ public class Sentinel implements IEntity, Serializable, Cloneable {
 		return this.position;
 	}
 
-	public static Rect2 getRectoffset() {
-		return rectOffSet;
-	}
-
 	@Override
 	public boolean isAlive() {
-		return true;
+		return this.isAlive;
 	}
 
 	@Override
@@ -72,8 +87,11 @@ public class Sentinel implements IEntity, Serializable, Cloneable {
 
 	@Override
 	public void takeDamage(int damage) {
-		// TODO Auto-generated method stub
+		this.life -= damage;
 
+		if (life <= 0) {
+			this.isAlive = false;
+		}
 	}
 
 	@Override
@@ -81,9 +99,9 @@ public class Sentinel implements IEntity, Serializable, Cloneable {
 		this.position = position;
 	}
 
-	public Sentinel clone() {
+	public Attacker clone() {
 		try {
-			return (Sentinel) super.clone();
+			return (Attacker) super.clone();
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}

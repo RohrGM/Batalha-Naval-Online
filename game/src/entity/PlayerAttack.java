@@ -4,8 +4,6 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -18,20 +16,20 @@ import util.Rect2;
 import util.SizePattern;
 import util.Vector2;
 
-public class PlayerDefend implements IEntity, Serializable, IPlayerInput, Cloneable {
-
-	private Rect2 rect = new Rect2(SizePattern.tileSize, SizePattern.tileSize);
-	private PlayerInput keyHandler = new PlayerInput(this);
-	private Vector2 position = new Vector2(64, 256);
-	private ImageData imageData = new ImageData();
-	private EntityManager manager;
+public class PlayerAttack implements IEntity, Serializable, IPlayerInput, Cloneable {
 
 	private static final long serialVersionUID = -9085298154653380600L;
-	private final Vector2 RIGHTLIMIT = new Vector2(576, 640);
-	private final Vector2 LEFTLIMIT = new Vector2(64, 256);
-	private final int SPEED = 128;
+	private PlayerInput keyHandler = new PlayerInput(this);
+	private ImageData imageData = new ImageData();
+	private Vector2 position = new Vector2(1216, 256);
+	private EntityManager manager;
+	private Rect2 rect = new Rect2(SizePattern.tileSize, SizePattern.tileSize);
 
-	public PlayerDefend(EntityManager manager) {
+	final private Vector2 LEFTLIMIT = new Vector2(1216, 256);
+	final private Vector2 RIGHTLIMIT = new Vector2(1216, 640);
+	final private int SPEED = 128;
+
+	public PlayerAttack(EntityManager manager) {
 		this.manager = manager;
 	}
 
@@ -54,28 +52,13 @@ public class PlayerDefend implements IEntity, Serializable, IPlayerInput, Clonea
 			this.position.x = (this.position.x + SPEED > RIGHTLIMIT.x) ? this.position.x : this.position.x + SPEED;
 			break;
 		case KeyEvent.VK_SPACE:
-			this.spawSentinel(position);
+			this.spawAttacker(position);
 			break;
 		}
 	}
 
-	private void spawSentinel(Vector2 position) {
-		if (isSpaceAvailable(position)) {
-			this.manager.addEntity(new Sentinel(this.position.clone(), this.manager));
-		}
-	}
-
-	private boolean isSpaceAvailable(Vector2 position) {
-		List<IEntity> entities = new ArrayList<>(this.manager.getEntities());
-		for (IEntity entity : entities) {
-			if (entity.getClass() == Sentinel.class) {
-
-				if (entity.getPosition().compare(position.withOffSet(Sentinel.getRectoffset()))) {
-					return false;
-				}
-			}
-		}
-		return true;
+	private void spawAttacker(Vector2 position) {
+		this.manager.addEntity(new Attacker(this.manager, position));
 	}
 
 	@Override
@@ -118,9 +101,9 @@ public class PlayerDefend implements IEntity, Serializable, IPlayerInput, Clonea
 		this.position = position;
 	}
 
-	public PlayerDefend clone() {
+	public PlayerAttack clone() {
 		try {
-			return (PlayerDefend) super.clone();
+			return (PlayerAttack) super.clone();
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}

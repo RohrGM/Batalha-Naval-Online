@@ -10,20 +10,11 @@ import enums.Mode;
 public class Player implements Serializable {
 
 	private static final long serialVersionUID = 1613491619606389031L;
-	private boolean ready = false;
 	private long id;
-	private Mode mode = null;
+	private Mode mode = Mode.UNDEFINED;
 
 	public Player() {
 		this.id = ThreadLocalRandom.current().nextInt(0, 1000000 + 1);
-	}
-
-	public boolean isReady() {
-		return ready;
-	}
-
-	public void setReady(boolean ready) {
-		this.ready = ready;
 	}
 
 	public Mode getMode() {
@@ -45,5 +36,15 @@ public class Player implements Serializable {
 			}
 		}
 		return null;
+	}
+
+	public static boolean isReady(List<Player> players) {
+		for (Player player : players) {
+			if (player.getMode() == Mode.UNDEFINED) {
+				return false;
+			}
+		}
+		return true;
+		//return players.size() > 1 ? true : false;
 	}
 }

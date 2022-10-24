@@ -14,10 +14,11 @@ import Interface.IEntity;
 import asset.ImageData;
 import component.EntityManager;
 import entity.Attacker;
-import entity.PlayerDefend;
+import entity.PlayerAttack;
+
 import util.SizePattern;
 
-public class GameDefend extends JPanel implements Runnable {
+public class GameAttack extends JPanel implements Runnable {
 
 	private Thread gameThread;
 	private ImageData imageData = new ImageData();
@@ -26,7 +27,7 @@ public class GameDefend extends JPanel implements Runnable {
 	private static long frameCount = 1;
 	private final int FPS = 30;
 
-	public GameDefend(PanelController panelController) {
+	public GameAttack(PanelController panelController) {
 		this.panelController = panelController;
 		this.manager = new EntityManager(this.panelController.getCommunication(),
 				Long.toString(this.panelController.getPlayer().getId()));
@@ -35,7 +36,7 @@ public class GameDefend extends JPanel implements Runnable {
 		this.startGameThread();
 		this.setFocusable(true);
 
-		PlayerDefend player = new PlayerDefend(this.manager);
+		PlayerAttack player = new PlayerAttack(this.manager);
 		this.manager.addEntity(player);
 		this.panelController.addKeyListener(player.getKeyHandler());
 	}
@@ -59,9 +60,13 @@ public class GameDefend extends JPanel implements Runnable {
 
 	private void update() {
 		for (IEntity entity : new ArrayList<>(this.manager.getEntities())) {
+			if (entity.getClass() == Attacker.class) {
+				// System.out.println(entity);
+			}
 			entity.update();
 			this.checkLife(entity);
 		}
+		// System.out.println("===============");
 	}
 
 	private void draw(Graphics2D graphics2d) {

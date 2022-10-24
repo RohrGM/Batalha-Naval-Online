@@ -4,5 +4,6 @@ import java.io.Serializable;
 
 public enum Mode implements Serializable{
 	ATTACK,
-	DEFEND
+	DEFEND,
+	UNDEFINED
 }

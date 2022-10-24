@@ -22,6 +22,10 @@ public class Room {
 		return players;
 	}
 
+	public List<Player> getPlayers() {
+		return players;
+	}
+
 	private boolean isAvailableMode(Mode mode) {
 		for (Player player : this.players) {
 			if (player.getMode() == mode) {
