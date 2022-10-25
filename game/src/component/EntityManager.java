@@ -25,7 +25,9 @@ public class EntityManager implements Serializable {
 
 	public void addEntity(IEntity entity) {
 		try {
-			List<IEntity> aux = this.communication.updateEntities(entity, this.id);
+			IEntity newEntity = entity.clone();
+			newEntity.setManager(null);
+			List<IEntity> aux = this.communication.updateEntities(newEntity, this.id);
 			this.entities.add(entity);
 			this.addEntities(aux);
 		} catch (RemoteException e) {
