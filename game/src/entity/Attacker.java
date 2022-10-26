@@ -13,6 +13,7 @@ import Interface.IEntity;
 import asset.ImageData;
 import component.EntityManager;
 import util.Body;
+import util.Collision;
 import util.Rect2;
 import util.SizePattern;
 import util.Vector2;
@@ -45,7 +46,7 @@ public class Attacker implements IEntity, Serializable, Cloneable {
 		List<IEntity> entities = this.manager.getEntities();
 		boolean isColliding = false;
 		for (IEntity entity : new ArrayList<>(entities)) {
-			if (entity.getClass() == Sentinel.class && this.body.is_colliding(entity.getBody())) {
+			if (entity.getClass() == Sentinel.class && Collision.is_colliding(this.body, entity.getBody())) {
 				isColliding = true;
 			}
 		}

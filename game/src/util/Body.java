@@ -19,17 +19,6 @@ public class Body implements Serializable {
 		this.h = h * SizePattern.scale;
 	}
 
-	public boolean is_colliding(Body body) {
-		if (this.equals(body) == false 
-				&& this.x + this.w > body.getX()
-				&& body.getX() + this.y > this.x
-				&& this.y + this.h > body.getY()
-				&& body.getY() + body.getH() > this.y) {
-			return true;
-		}
-		return false;
-	}
-
 	public int getX() {
 		return this.position.x + this.x;
 	}

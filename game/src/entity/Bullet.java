@@ -9,6 +9,7 @@ import java.util.List;
 import Interface.IEntity;
 import component.EntityManager;
 import util.Body;
+import util.Collision;
 import util.Rect2;
 import util.SizePattern;
 import util.Vector2;
@@ -36,9 +37,8 @@ public class Bullet implements IEntity, Serializable, Cloneable {
 	private void onBodyCollision() {
 		List<IEntity> entities = this.manager.getEntities();
 		for (IEntity entity : new ArrayList<>(entities)) {
-			if (entity.getClass() == Attacker.class && this.body.is_colliding(entity.getBody())) {
+			if (entity.getClass() == Attacker.class && Collision.is_colliding(this.body, entity.getBody())) {
 				entity.takeDamage(damage);
-				System.out.println("Bati: " + entity);
 				this.isAlive = false;
 			}
 		}
