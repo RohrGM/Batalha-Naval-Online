@@ -3,6 +3,7 @@ package Interface;
 import java.awt.Graphics2D;
 
 import component.EntityManager;
+import util.Body;
 import util.Rect2;
 import util.Vector2;
 
@@ -23,6 +24,8 @@ public interface IEntity {
 	public void setPosition(Vector2 position);
 
 	public void setManager(EntityManager manager);
+	
+	public Body getBody();
 
 	public IEntity clone();
 }

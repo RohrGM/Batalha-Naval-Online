@@ -8,7 +8,7 @@ import java.util.List;
 
 import Interface.IEntity;
 import component.EntityManager;
-import util.Collision;
+import util.Body;
 import util.Rect2;
 import util.SizePattern;
 import util.Vector2;
@@ -21,20 +21,22 @@ public class Bullet implements IEntity, Serializable, Cloneable {
 	private Vector2 position;
 	private Rect2 rect;
 	private int damage;
+	private Body body;
 
-	private final int SPEED = 16;
+	private final int SPEED = 24;
 
 	public Bullet(EntityManager manager, Vector2 position) {
 		this.damage = 10;
 		this.position = new Vector2(position.x, position.y);
 		this.rect = new Rect2(32, 4);
 		this.manager = manager;
+		this.body = new Body(this.position, -16, -1, 32, 3);
 	}
 
 	private void onBodyCollision() {
 		List<IEntity> entities = this.manager.getEntities();
 		for (IEntity entity : new ArrayList<>(entities)) {
-			if (entity.getClass() == Attacker.class && Collision.is_colliding(this, entity)) {
+			if (entity.getClass() == Attacker.class && this.body.is_colliding(entity.getBody())) {
 				entity.takeDamage(damage);
 				System.out.println("Bati: " + entity);
 				this.isAlive = false;
@@ -54,6 +56,9 @@ public class Bullet implements IEntity, Serializable, Cloneable {
 
 	@Override
 	public void draw(Graphics2D graphics2d) {
+		graphics2d.setColor(Color.BLUE);
+		graphics2d.fillRect(this.body.getX(), this.body.getY(), this.body.getW(), this.body.getH());
+		
 		graphics2d.setColor(Color.YELLOW);
 		graphics2d.fillRect(this.position.x, this.position.y, this.rect.w, this.rect.h);
 	}
@@ -96,5 +101,10 @@ public class Bullet implements IEntity, Serializable, Cloneable {
 	@Override
 	public void setManager(EntityManager manager) {
 		this.manager = manager;
+	}
+
+	@Override
+	public Body getBody() {
+		return this.body;
 	}
 }

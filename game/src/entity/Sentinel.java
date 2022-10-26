@@ -1,5 +1,6 @@
 package entity;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.IOException;
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import Interface.IEntity;
 import asset.ImageData;
 import component.EntityManager;
 import panel.GameDefend;
+import util.Body;
 import util.Rect2;
 import util.SizePattern;
 import util.Vector2;
@@ -23,10 +25,12 @@ public class Sentinel implements IEntity, Serializable, Cloneable {
 	private ImageData imageData = new ImageData();
 	private EntityManager manager;
 	private Vector2 position;
+	private Body body;
 
 	public Sentinel(Vector2 position, EntityManager manager) {
 		this.manager = manager;
 		this.position = new Vector2(position.x + rectOffSet.w, position.y + rectOffSet.h);
+		this.body = new Body(position, 0, -14, 15, 27);
 	}
 
 	private void shoot() {
@@ -36,13 +40,14 @@ public class Sentinel implements IEntity, Serializable, Cloneable {
 	@Override
 	public void update() {
 		if ((GameDefend.getFrameCount() + this.frameStart) % 90 == 0) {
-			System.out.println("atirei: " + GameDefend.getFrameCount());
 			this.shoot();
 		}
 	}
 
 	@Override
 	public void draw(Graphics2D graphics2d) {
+		graphics2d.setColor(Color.BLUE);
+		graphics2d.fillRect(this.body.getX(), this.body.getY(), this.body.getW(), this.body.getH());
 		try {
 			graphics2d.drawImage(ImageIO.read(getClass().getResourceAsStream(this.imageData.ober1)), this.position.x,
 					this.position.y, SizePattern.tileSize * 2, SizePattern.tileSize * 2, null);
@@ -93,5 +98,10 @@ public class Sentinel implements IEntity, Serializable, Cloneable {
 	@Override
 	public void setManager(EntityManager manager) {
 		this.manager = manager;
+	}
+
+	@Override
+	public Body getBody() {
+		return this.body;
 	}
 }

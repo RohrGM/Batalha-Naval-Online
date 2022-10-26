@@ -1,5 +1,6 @@
 package entity;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.IOException;
 import java.io.Serializable;
@@ -11,7 +12,7 @@ import javax.imageio.ImageIO;
 import Interface.IEntity;
 import asset.ImageData;
 import component.EntityManager;
-import util.Collision;
+import util.Body;
 import util.Rect2;
 import util.SizePattern;
 import util.Vector2;
@@ -24,6 +25,7 @@ public class Attacker implements IEntity, Serializable, Cloneable {
 	private boolean isAlive = true;
 	private EntityManager manager;
 	private Vector2 position;
+	private Body body;
 	private int damage;
 	private int life;
 
@@ -33,6 +35,7 @@ public class Attacker implements IEntity, Serializable, Cloneable {
 
 	public Attacker(EntityManager manager, Vector2 position) {
 		this.position = new Vector2(position.x + XOFFSET, position.y + YOFFSET);
+		this.body = new Body(this.position, 8, 0, 15, 27);
 		this.manager = manager;
 		this.damage = 10;
 		this.life = 50;
@@ -42,7 +45,7 @@ public class Attacker implements IEntity, Serializable, Cloneable {
 		List<IEntity> entities = this.manager.getEntities();
 		boolean isColliding = false;
 		for (IEntity entity : new ArrayList<>(entities)) {
-			if (entity.getClass() == Sentinel.class && Collision.is_colliding(this, entity)) {
+			if (entity.getClass() == Sentinel.class && this.body.is_colliding(entity.getBody())) {
 				isColliding = true;
 			}
 		}
@@ -62,6 +65,8 @@ public class Attacker implements IEntity, Serializable, Cloneable {
 
 	@Override
 	public void draw(Graphics2D graphics2d) {
+		graphics2d.setColor(Color.BLUE);
+		graphics2d.fillRect(this.body.getX(), this.body.getY(), this.body.getW(), this.body.getH());
 		try {
 			graphics2d.drawImage(ImageIO.read(getClass().getResourceAsStream(this.imageData.zombie1)), this.position.x,
 					this.position.y, SizePattern.tileSize * 2, SizePattern.tileSize * 2, null);
@@ -111,5 +116,10 @@ public class Attacker implements IEntity, Serializable, Cloneable {
 	@Override
 	public void setManager(EntityManager manager) {
 		this.manager = manager;
+	}
+
+	@Override
+	public Body getBody() {
+		return this.body;
 	}
 }

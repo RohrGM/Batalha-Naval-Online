@@ -14,6 +14,7 @@ import Interface.IPlayerInput;
 import asset.ImageData;
 import component.EntityManager;
 import service.PlayerInput;
+import util.Body;
 import util.Rect2;
 import util.SizePattern;
 import util.Vector2;
@@ -130,6 +131,11 @@ public class PlayerDefend implements IEntity, Serializable, IPlayerInput, Clonea
 	@Override
 	public void setManager(EntityManager manager) {
 		this.manager = manager;
+	}
+
+	@Override
+	public Body getBody() {
+		return null;
 	}
 
 }
