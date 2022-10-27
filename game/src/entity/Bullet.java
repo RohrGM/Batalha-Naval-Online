@@ -56,8 +56,8 @@ public class Bullet implements IEntity, Serializable, Cloneable {
 
 	@Override
 	public void draw(Graphics2D graphics2d) {
-		graphics2d.setColor(Color.BLUE);
-		graphics2d.fillRect(this.body.getX(), this.body.getY(), this.body.getW(), this.body.getH());
+		/*graphics2d.setColor(Color.BLUE);
+		graphics2d.fillRect(this.body.getX(), this.body.getY(), this.body.getW(), this.body.getH());*/
 		
 		graphics2d.setColor(Color.YELLOW);
 		graphics2d.fillRect(this.position.x, this.position.y, this.rect.w, this.rect.h);

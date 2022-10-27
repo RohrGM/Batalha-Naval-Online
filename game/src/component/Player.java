@@ -44,7 +44,7 @@ public class Player implements Serializable {
 				return false;
 			}
 		}
-		return true;
-		//return players.size() > 1 ? true : false;
+		//return true;
+		return players.size() > 1 ? true : false;
 	}
 }

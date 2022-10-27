@@ -2,67 +2,58 @@ package entity;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.io.IOException;
 import java.io.Serializable;
 
-import javax.imageio.ImageIO;
-
-import Interface.IEntity;
+import Interface.IAnimatedEntity;
 import asset.ImageData;
 import component.EntityManager;
-import panel.GameDefend;
 import util.AnimatedSprite;
-import util.Animation;
 import util.Body;
 import util.Rect2;
 import util.SizePattern;
 import util.Vector2;
 
-public class Sentinel implements IEntity, Serializable, Cloneable {
+public class Sentinel implements IAnimatedEntity, Serializable, Cloneable {
 
 	private Rect2 rect = new Rect2(SizePattern.tileSize * 2, SizePattern.tileSize * 2);
 	private static final long serialVersionUID = 1347943847248129981L;
 	private static final Rect2 rectOffSet = new Rect2(-16, -64);
-	private long frameStart = GameDefend.getFrameCount();
-	private ImageData imageData = new ImageData();
+	private long frameCount = 0;
+	private AnimatedSprite animatedSprite;
+	private boolean isAlive = true;
 	private EntityManager manager;
 	private Vector2 position;
-	private Animation anim;
 	private Body body;
+	private int life;
 	
 
 	public Sentinel(Vector2 position, EntityManager manager) {
-		this.anim = new Animation(new AnimatedSprite(), imageData.sentinel1, true, 7, 3);
 		this.position = new Vector2(position.x + rectOffSet.w, position.y + rectOffSet.h);
 		this.body = new Body(position, 0, -14, 15, 27);
 		this.manager = manager;
-		this.anim.start(GameDefend.getFrameCount());
+		this.life = 30;
+		this.animatedSprite = new AnimatedSprite(this, this.position, "Idle", ImageData.sentinel1, this.frameCount);
 	}
 
 	private void shoot() {
 		this.manager.addEntity(new Bullet(this.manager, position.sum(new Vector2(96, 56))));
+		this.animatedSprite.setCurrentAnim("Shoot", this.frameCount);
 	}
 
 	@Override
 	public void update() {
-		System.out.println(this.anim.getIndex(GameDefend.getFrameCount())+"");
-		if ((GameDefend.getFrameCount() + this.frameStart) % 90 == 0) {
+		this.frameCount++;
+		if (this.frameCount % 90 == 0) {
 			this.shoot();
 		}
 	}
 
 	@Override
 	public void draw(Graphics2D graphics2d) {
-		graphics2d.setColor(Color.BLUE);
-		graphics2d.fillRect(this.body.getX(), this.body.getY(), this.body.getW(), this.body.getH());
-		System.out.println(this.anim.getImgPath()+"Idle"+this.anim.getIndex(GameDefend.getFrameCount())+".png");
+		/*graphics2d.setColor(Color.BLUE);
+		graphics2d.fillRect(this.body.getX(), this.body.getY(), this.body.getW(), this.body.getH());*/
 		
-		try {
-			graphics2d.drawImage(ImageIO.read(getClass().getResourceAsStream(this.anim.getImgPath()+"Idle"+this.anim.getIndex(GameDefend.getFrameCount())+".png")), this.position.x,
-					this.position.y, SizePattern.tileSize * 2, SizePattern.tileSize * 2, null);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		animatedSprite.draw(graphics2d, this.frameCount);
 	}
 
 	@Override
@@ -76,7 +67,7 @@ public class Sentinel implements IEntity, Serializable, Cloneable {
 
 	@Override
 	public boolean isAlive() {
-		return true;
+		return this.isAlive;
 	}
 
 	@Override
@@ -86,8 +77,11 @@ public class Sentinel implements IEntity, Serializable, Cloneable {
 
 	@Override
 	public void takeDamage(int damage) {
-		// TODO Auto-generated method stub
+		this.life -= damage;
 
+		if (life <= 0) {
+			this.isAlive = false;
+		}
 	}
 
 	@Override
@@ -112,5 +106,13 @@ public class Sentinel implements IEntity, Serializable, Cloneable {
 	@Override
 	public Body getBody() {
 		return this.body;
+	}
+
+	@Override
+	public void endLoopAnim(String anim) {
+		if(anim.equals("Shoot")) {
+			this.animatedSprite.setCurrentAnim("Idle", this.frameCount);
+		}
+		
 	}
 }

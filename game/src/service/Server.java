@@ -15,6 +15,7 @@ import Interface.IEntity;
 import component.EntityManager;
 import component.Player;
 import component.Room;
+import entity.Bullet;
 import entity.PlayerAttack;
 import entity.PlayerDefend;
 import enums.Mode;
@@ -55,7 +56,7 @@ public class Server extends UnicastRemoteObject implements ICommunication {
 			if (key.equals(id)) {
 				if (entity != null) {
 					List<IEntity> list = this.playersEntities.get(key);
-					if(entity.getClass() != PlayerAttack.class && entity.getClass() != PlayerDefend.class ) {
+					if(entity.getClass() != PlayerAttack.class && entity.getClass() != PlayerDefend.class && entity.getClass() != Bullet.class ) {
 						list.add(entity.clone());
 						this.playersEntities.put(key, list);
 					}					
