@@ -23,14 +23,14 @@ public class PlayerDefend implements IEntity, Serializable, IPlayerInput, Clonea
 
 	private Rect2 rect = new Rect2(SizePattern.tileSize, SizePattern.tileSize);
 	private PlayerInput keyHandler = new PlayerInput(this);
-	private Vector2 position = new Vector2(64, 256);
+	private Vector2 position = new Vector2(SizePattern.tileSize, SizePattern.tileSize * 4);
 	private ImageData imageData = new ImageData();
 	private EntityManager manager;
 
 	private static final long serialVersionUID = -9085298154653380600L;
-	private final Vector2 RIGHTLIMIT = new Vector2(576, 640);
-	private final Vector2 LEFTLIMIT = new Vector2(64, 256);
-	private final int SPEED = 128;
+	private final Vector2 RIGHTLIMIT = new Vector2(SizePattern.tileSize * 9, SizePattern.tileSize * 10);
+	private final Vector2 LEFTLIMIT = new Vector2(SizePattern.tileSize, SizePattern.tileSize * 4);
+	private final int SPEED = SizePattern.tileSize * 2;
 
 	public PlayerDefend(EntityManager manager) {
 		this.manager = manager;

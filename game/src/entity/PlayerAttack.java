@@ -22,15 +22,16 @@ public class PlayerAttack implements IEntity, Serializable, IPlayerInput, Clonea
 	private static final long serialVersionUID = -9085298154653380600L;
 	private PlayerInput keyHandler = new PlayerInput(this);
 	private ImageData imageData = new ImageData();
-	private Vector2 position = new Vector2(1216, 256);
+	private Vector2 position = new Vector2(SizePattern.screenWidth - SizePattern.tileSize, SizePattern.tileSize * 4);
 	private EntityManager manager;
 	private Rect2 rect = new Rect2(SizePattern.tileSize, SizePattern.tileSize);
 
-	final private Vector2 LEFTLIMIT = new Vector2(1216, 256);
-	final private Vector2 RIGHTLIMIT = new Vector2(1216, 640);
-	final private int SPEED = 128;
+	final private Vector2 LEFTLIMIT = new Vector2(SizePattern.screenWidth - SizePattern.tileSize, SizePattern.tileSize * 4);
+	final private Vector2 RIGHTLIMIT = new Vector2(SizePattern.screenWidth - SizePattern.tileSize, SizePattern.tileSize * 10);
+	final private int SPEED = SizePattern.tileSize * 2;
 
 	public PlayerAttack(EntityManager manager) {
+		System.out.println(SPEED);
 		this.manager = manager;
 	}
 
